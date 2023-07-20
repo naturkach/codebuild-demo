@@ -8,7 +8,7 @@ version: 0.2
 env:
   variables:
     AWS_DEFAULT_REGION: "eu-north-1"
-    AWS_ACCOUNT_ID    : "735207908250"
+    AWS_ACCOUNT_ID    : "id--"
     ECR_REPO_NAME     : "webapp"
     ECR_IMAGE_TAG     : "latest"
 
