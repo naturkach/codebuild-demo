@@ -36,8 +36,6 @@ phases:
       - echo "AWS_ACCOUNT_ID $AWS_ACCOUNT_ID"
       - echo "AWS_DEFAULT_REGION $AWS_DEFAULT_REGION"
       - echo "Login to AWS ECR and get commit id"
-    #  - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
-    # - aws ecr get-login-password --region eu-north-1 | docker login --username AWS --password-stdin 735207908250.dkr.ecr.eu-north-1.amazonaws.com    
       - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com  
       - COMMIT_ID=$(git rev-parse --short HEAD)
 
@@ -48,9 +46,7 @@ phases:
       - echo "-------------------------------"
       - echo "${ECR_REPO_NAME}:${ECR_IMAGE_TAG}" >> log.txt
       - aws s3 cp log.txt s3://aws-devops-cicddemo-gorus-0711/log.txt 
-      #- docker build -t ${ECR_REPO_NAME}:${ECR_IMAGE_TAG} .
-      # - sudo systemctl status docker
-      # - sudo systemctl start docker.service
+      - ls -la
       - docker build -t webapp:latest .
       - docker images -a
       - docker tag $ECR_REPO_NAME:$ECR_IMAGE_TAG $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$ECR_REPO_NAME:$ECR_IMAGE_TAG
