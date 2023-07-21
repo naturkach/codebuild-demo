@@ -7,12 +7,12 @@ version: 0.2
 
 env:
   variables:
-    AWS_DEFAULT_REGION : "eu-north-1"
+    AWS_DEFAULT_REGION: "eu-north-1"
 #    AWS_ACCOUNT_ID    : "id--"
     ECR_REPO_NAME      : "webapp"
     ECR_IMAGE_TAG      : "latest"
   parameter-store:
-    AWS_ACCOUNT_ID     : "MY_ACCOUNT_ID"
+    AWS_ACCOUNT_ID: "MY_ACCOUNT_ID"
 
 phases:
   install:
@@ -22,8 +22,9 @@ phases:
       - git --version
       - docker --version
       - echo "AWS_ACCOUNT_ID $AWS_ACCOUNT_ID"
-      - echo "AWS_DEFAULT_REGION $AWS_DEFAULT_REGION"
+      - echo "AWS_DEFAULT_REGION $AWS_DEFAULT_REGION" >> log.txt
       - export AWS_DEFAULT_REGION=eu-north-1
+      - cat log.txt
       - echo "--------------------------------"
 
   pre_build:
