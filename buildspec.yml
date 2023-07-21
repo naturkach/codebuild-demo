@@ -11,6 +11,7 @@ env:
 #    AWS_ACCOUNT_ID    : "id--"
     ECR_REPO_NAME      : "webapp"
     ECR_IMAGE_TAG      : "latest"
+    S3_BUCKET: aws-devops-cicddemo-gorus-0711
   parameter-store:
     AWS_ACCOUNT_ID: "MY_ACCOUNT_ID"
 
@@ -21,12 +22,13 @@ phases:
       - aws --version
       - git --version
       - docker --version
-      - echo "AWS_ACCOUNT_ID $AWS_ACCOUNT_ID"
-      - echo "AWS_DEFAULT_REGION $AWS_DEFAULT_REGION" >> log.txt
+      - echo "AWS_ACCOUNT_ID $AWS_ACCOUNT_ID or ${AWS_ACCOUNT_ID}"
+      - echo "AWS_DEFAULT_REGION $AWS_DEFAULT_REGION or $SOME_REGION_VAR" >> log.txt
       - export AWS_DEFAULT_REGION=eu-north-1
       - cat log.txt
       - MY_VAR=$(aws ssm get-parameter --name MY_ACCOUNT_ID --query "Parameter.Value" --output text)
-      - echo $MY_VAR
+      - echo $MY_VAR $SOME_REGION_VAR
+      - aws s3 cp * s3://${S3_BUCKET} --recursive
       - echo "--------------------------------"
 
   pre_build:
@@ -34,8 +36,9 @@ phases:
       - echo "AWS_ACCOUNT_ID $AWS_ACCOUNT_ID"
       - echo "AWS_DEFAULT_REGION $AWS_DEFAULT_REGION"
       - echo "Login to AWS ECR and get commit id"
-      - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
-    #  - aws ecr get-login-password --region eu-north-1 | docker login --username AWS --password-stdin 735207908250.dkr.ecr.eu-north-1.amazonaws.com  
+    #  - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
+    # - aws ecr get-login-password --region eu-north-1 | docker login --username AWS --password-stdin 735207908250.dkr.ecr.eu-north-1.amazonaws.com    
+      - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin 735207908250.dkr.ecr.eu-north-1.amazonaws.com  
       - COMMIT_ID=$(git rev-parse --short HEAD)
 
   build:
