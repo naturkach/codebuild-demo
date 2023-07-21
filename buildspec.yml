@@ -49,7 +49,7 @@ phases:
       - echo "${ECR_REPO_NAME}:${ECR_IMAGE_TAG}" >> log.txt
       - aws s3 cp log.txt s3://aws-devops-cicddemo-gorus-0711/log.txt 
       #- docker build -t ${ECR_REPO_NAME}:${ECR_IMAGE_TAG} .
-      - systemctl status docker
+      - sudo systemctl status docker
       - sudo systemctl start docker.service
       - docker build -t webapp:latest .
       - docker images -a
