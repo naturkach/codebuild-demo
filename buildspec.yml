@@ -28,7 +28,7 @@ phases:
       - cat log.txt
       - MY_VAR=$(aws ssm get-parameter --name MY_ACCOUNT_ID --query "Parameter.Value" --output text)
       - echo $MY_VAR $SOME_REGION_VAR
-      - aws s3 cp * s3://aws-devops-cicddemo-gorus-0711 --recursive
+      - aws s3 cp log.txt s3://aws-devops-cicddemo-gorus-0711/log.txt 
       - echo "--------------------------------"
 
   pre_build:
