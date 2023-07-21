@@ -48,7 +48,9 @@ phases:
       - echo "-------------------------------"
       - echo "${ECR_REPO_NAME}:${ECR_IMAGE_TAG}" >> log.txt
       - aws s3 cp log.txt s3://aws-devops-cicddemo-gorus-0711/log.txt 
-      - docker build -t ${ECR_REPO_NAME}:${ECR_IMAGE_TAG} .
+      #- docker build -t ${ECR_REPO_NAME}:${ECR_IMAGE_TAG} .
+      - docker build -t webapp:latest .
+      - docker images -a
       - docker tag $ECR_REPO_NAME:$ECR_IMAGE_TAG $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$ECR_REPO_NAME:$ECR_IMAGE_TAG
       - docker tag $ECR_REPO_NAME:$ECR_IMAGE_TAG $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$ECR_REPO_NAME:$COMMIT_ID
 
