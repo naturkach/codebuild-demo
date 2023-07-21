@@ -23,7 +23,7 @@ phases:
       - aws --version
       - git --version
       - docker --version
-      - echo "AWS_ACCOUNT_ID $AWS_ACCOUNT_ID or ${AWS_ACCOUNT_ID}"- > log.txt
+      - echo "AWS_ACCOUNT_ID $AWS_ACCOUNT_ID or ${AWS_ACCOUNT_ID}" > log.txt
       - echo "AWS_DEFAULT_REGION $AWS_DEFAULT_REGION or $SOME_REGION_VAR" >> log.txt
       - export AWS_DEFAULT_REGION=eu-north-1
       - cat log.txt
@@ -39,13 +39,15 @@ phases:
       - echo "Login to AWS ECR and get commit id"
     #  - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
     # - aws ecr get-login-password --region eu-north-1 | docker login --username AWS --password-stdin 735207908250.dkr.ecr.eu-north-1.amazonaws.com    
-      - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin ${AWS_ACCOUNT_ID}.dkr.ecr.eu-north-1.amazonaws.com  
+      - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com  
       - COMMIT_ID=$(git rev-parse --short HEAD)
 
   build:
     commands:
       - echo Building the Docker image...
       - echo "some var ${somevar}" >> log.txt
+      - echo "-------------------------------"
+      - echo "${ECR_REPO_NAME}:${ECR_IMAGE_TAG}" >> log.txt
       - docker build -t ${ECR_REPO_NAME}:${ECR_IMAGE_TAG} .
       - docker tag $ECR_REPO_NAME:$ECR_IMAGE_TAG $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$ECR_REPO_NAME:$ECR_IMAGE_TAG
       - docker tag $ECR_REPO_NAME:$ECR_IMAGE_TAG $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$ECR_REPO_NAME:$COMMIT_ID
