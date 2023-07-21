@@ -28,8 +28,7 @@ phases:
       - export AWS_DEFAULT_REGION=eu-north-1
       - cat log.txt
       - MY_VAR=$(aws ssm get-parameter --name MY_ACCOUNT_ID --query "Parameter.Value" --output text)
-      - echo $MY_VAR $SOME_REGION_VAR
-      - aws s3 cp log.txt s3://aws-devops-cicddemo-gorus-0711/log.txt 
+      - echo $MY_VAR $SOME_REGION_VAR      
       - echo "--------------------------------"
 
   pre_build:
@@ -48,6 +47,7 @@ phases:
       - echo "some var ${somevar}" >> log.txt
       - echo "-------------------------------"
       - echo "${ECR_REPO_NAME}:${ECR_IMAGE_TAG}" >> log.txt
+      - aws s3 cp log.txt s3://aws-devops-cicddemo-gorus-0711/log.txt 
       - docker build -t ${ECR_REPO_NAME}:${ECR_IMAGE_TAG} .
       - docker tag $ECR_REPO_NAME:$ECR_IMAGE_TAG $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$ECR_REPO_NAME:$ECR_IMAGE_TAG
       - docker tag $ECR_REPO_NAME:$ECR_IMAGE_TAG $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$ECR_REPO_NAME:$COMMIT_ID
